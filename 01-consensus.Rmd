@@ -5,6 +5,7 @@
 3. Single-shot concensus: **Byzantine Broadcast** \@ref(def:bbSetup) and **Byzantine Agreement** \@ref(def:baSetup). 
     - **Dolev-Strong** (theorem \@ref(thm:dolevStrongResult)): BB is solvable under permissioned setting, synchronous model, and PKI assumptions regardless of Byzantine portion. 
     - Equivalence of BA and BB when $f<n/2$: theorem \@ref(thm:singleShotReduction). 
+    - **FLM Impossibility Result** (theorem \@ref(thm:flm)): synchronous BB is not solvable for $f\geq n/3$ <u>in the absence of PKI</u>. 
 4. Multi-shot concensus: **State-Machine Replication** \@ref(def:smrSetup). Reduction to BB under permissioned setting and synchronous model (theorem \@ref(thm:smrBBReduction)). 
 
 ## Fundamental assumptions {#fundAssump -}
@@ -115,25 +116,54 @@ Note that the $t=f+1$ round of checks is paramount; suppose we terminate at time
 Similar to Byzantine broadcast \@ref(def:bbSetup), but each node has private bit $b_j\in \{0, 1\}$ with at most $f$ Byzantine nodes. Solution must satisfy termination and: 
 
 1. Agreement: all honest nodes output the same bit. 
-2. Validity: when all nodes have the same private input, they all terminate with $b$. 
+2. Validity: when all honest nodes have the same private input, they all terminate with $b$. 
 :::
 
 :::{.theorem #singleShotReduction name="deterministic BA-BB reduction"}
 Given $f<n/2$, there exists a deterministic BA solution iff there exists a deterministic BB solution. 
 :::
-
+<details>
+<summary>Proof</summary>
 Given $\pi$ solving the BB problem, construct a BA protocol as follows: 
 
 1. Nodes take turn to Byzantine-broadcast their private input $b_j$. 
 2. Output majority value. 
 
 - Validity: when all nodes have the same private input $b$, their private inputs are consistently broadcasted to all other honest nodes _since $\pi$ is valid_. Since $f<n/2$, honest nodes have consistent output by majority vote. 
-- Consistency: all honest nodes have the same "perception" of other nodes, so majority votes are consistent. 
+- Agreement: all honest nodes have the same "perception" of other nodes, so majority votes are consistent. 
 
 Given a BA protocol $\pi$, construct a BB protocol as follows: 
 
-1. $T=0$: non-senders run BA with $b_j=0$, sender runs with $v^*$. 
-2. $T=1$: non-senders run BA with $b_j=1$, sender runs with $v^*$. 
+1. $T=0$: sender sends $v^*$ to all non-senders. 
+2. Everyone runs $\pi$ on their received bits. 
+
+- Agreement follows from $\pi$ satisfying agreement. 
+- Validity: when sender is honest, all honest nodes receive $v^*$. Validity follows from BA validity of $\pi$. 
+</details>
+
+<details>
+<summary>Illustrative questions</summary>
+Assume $n\geq 3$ and consider the following protocol: 
+
+1. $t=0$: sender sends private bit with signature to all other nodes. The sender terminates with its own private bit. 
+2. $t=1$: every non-sender node $j$ echoes what it heard from the sender to all non-sender nodes. 
+3. $t=2$: every non-sender node collects all the votes it has received and outputs majority vote. 
+
+Several questions:
+
+1. For $f=1$ does this protocol satisfy agreement? 
+    - Yes. Suppose sender Byzantine, the honest non-sender nodes will agree on their votes (i.e. what they heard from the sender). Suppose a non-sender Byzantine, they're unable to overturn $n-1>1$ consistent votes. 
+2. For $f=1$, does this protocol satisfy validity?
+    - Yes. Honest sender broadcasts $v^*$ to $n-2$ other honest nodes, so there are $n-1>1$ honest votes contributing to the correct value. 
+3. For $f=2$, does this protocol satisfy agreement?
+    - No. Consider $n=4$ with 1 Byzantine sender and non-sender. Sender sends $0, 1$ to honest nodes $a, b$, respectively, and Byzantine non-sender echoes message $0, 1$ to $a, b$ respectively. Then $a, b$ outputs $0, 1$. 
+4. For $f=2$, does protocol satisfy validity? 
+    - Yes. Byzantine nodes cannot forge alternative vote. 
+5. Recall Dolev-Strong protocol. Suppose we stop it one step earlier with nodes committing to output at time $f$ rather than $f+1$. Does it continue to satisfy agreement? 
+    - No. Consider Byzantine sender with $f-1$ Byzantine non-senders. At time $f$, they can collude to produce a convincing message to send to a select subset of honest non-senders, while appearing honest to everyone else. 
+6. Does the protocol in (5) satisfy validity? 
+    - Yes. Non-senders cannot forge signatures. 
+</details>
 
 ## State-machine replication {#smr -}
 
@@ -160,3 +190,25 @@ In a synchronous and permissioned setting with PKI, given a BB protocol $\pi$ wh
 Liveliness: request submitted to $j$ will be included in the log of all honest nodes when it's $j$'s term to be the leader, by $\pi$'s _validity_ property. 
 
 Consistency: $\pi$'s consistency implies that nodes execute the appending operation consistently. 
+
+## FLM impossibility result {#flmImpossible -}
+
+The pivotal theorem below does not contradict Dolev-Strong \@ref(thm:dolevStrongResult). 
+
+:::{.theorem #flm name="FLM impossibility result"}
+In a synchronous model with $f\geq n/3$, there is no Byzantine broadcast protocol satisfying termination, agreement, and validity. 
+:::
+
+Proof: hexagon argument for $n=3, f=1$ plus reduction 
+
+For simplicity, consider $n=3$ with nodes $a, b, c$. Consider the hexagon connection below with $\pi$ running on each node; note that the hexagon type-checks since each triple of contiguous nodes only involve one sender and two non-senders: 
+
+```{r fig:hexagonFLM, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/hexagonFLM.jpg")
+```
+
+Crucially, the hexagon setup with 6 honest nodes is equivalent to three Byzantine setups, with the Byzantine node simulating the encircled honest nodes. Scenario $1$ forces $a=b=0$, scenario $2$ $b=c=0$, and scenario $c$ $c=a'=0$ but $a'=-1$, so either agreement or validity has to be violated. 
+
+Proceeding to the general case, we provide a reduction that BB protocol for $(n'=3k, f'=k)$ provides a BB protocol for $(3, 1)$: given a $(3k, k)$ BB protocol, let node $j\in [3]$ simulate nodes $[(j-1)k, jk]$ in $\pi$. Since each node simulates $k$ nodes, there are at most $k$ Byzantine nodes in the simulated protocol, so validity and consistency follows. 
+
+A $(3k+1, k+1)$ protocol provides similar reduction: even if single node simulating $k+1$ nodes is Byzantine, there are at most $kf+1$ Byzantine nodes in the simulated protocol. Finally, a $(3k+2, k+1)$ protocol reduces for each of the physical three nodes simulating $(k, k+1, k+1)$ virtual nodes. Even if the only physical Byzantine node simulates $k+1$ virtual nodes, there're only $k+1$ Byzantine nodes in the extended setup. 

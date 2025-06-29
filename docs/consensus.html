@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>1 Consensus | Blockchain</title>
   <meta name="description" content="1 Consensus | Blockchain" />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
   <meta property="og:title" content="1 Consensus | Blockchain" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Nicholas Lyu" />
 
 
-<meta name="date" content="2025-06-28" />
+<meta name="date" content="2025-06-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -78,6 +78,7 @@
 <li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#fundAssump"><i class="fa fa-check"></i>Fundamental assumptions</a></li>
 <li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#singleShot"><i class="fa fa-check"></i>Single-shot consensus</a></li>
 <li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#smr"><i class="fa fa-check"></i>State-machine replication</a></li>
+<li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#flmImpossible"><i class="fa fa-check"></i>FLM impossibility result</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i>Bibliography</a></li>
 </ul>
@@ -106,6 +107,7 @@
 <ul>
 <li><strong>Dolev-Strong</strong> (theorem <a href="consensus.html#thm:dolevStrongResult">1.1</a>): BB is solvable under permissioned setting, synchronous model, and PKI assumptions regardless of Byzantine portion.</li>
 <li>Equivalence of BA and BB when <span class="math inline">\(f&lt;n/2\)</span>: theorem <a href="consensus.html#thm:singleShotReduction">1.2</a>.</li>
+<li><strong>FLM Impossibility Result</strong> (theorem <a href="consensus.html#thm:flm">1.4</a>): synchronous BB is not solvable for <span class="math inline">\(f\geq n/3\)</span> <u>in the absence of PKI</u>.</li>
 </ul></li>
 <li>Multi-shot concensus: <strong>State-Machine Replication</strong> <a href="consensus.html#def:smrSetup">1.10</a>. Reduction to BB under permissioned setting and synchronous model (theorem <a href="consensus.html#thm:smrBBReduction">1.3</a>).</li>
 </ol>
@@ -214,12 +216,16 @@ Note that the <span class="math inline">\(t=f+1\)</span> round of checks is para
 <p><span id="def:baSetup" class="definition"><strong>Definition 1.9  (Byzantine Agreement) </strong></span>Similar to Byzantine broadcast <a href="consensus.html#def:bbSetup">1.6</a>, but each node has private bit <span class="math inline">\(b_j\in \{0, 1\}\)</span> with at most <span class="math inline">\(f\)</span> Byzantine nodes. Solution must satisfy termination and:</p>
 <ol style="list-style-type: decimal">
 <li>Agreement: all honest nodes output the same bit.</li>
-<li>Validity: when all nodes have the same private input, they all terminate with <span class="math inline">\(b\)</span>.</li>
+<li>Validity: when all honest nodes have the same private input, they all terminate with <span class="math inline">\(b\)</span>.</li>
 </ol>
 </div>
 <div class="theorem">
 <p><span id="thm:singleShotReduction" class="theorem"><strong>Theorem 1.2  (deterministic BA-BB reduction) </strong></span>Given <span class="math inline">\(f&lt;n/2\)</span>, there exists a deterministic BA solution iff there exists a deterministic BB solution.</p>
 </div>
+<details>
+<summary>
+Proof
+</summary>
 <p>Given <span class="math inline">\(\pi\)</span> solving the BB problem, construct a BA protocol as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Nodes take turn to Byzantine-broadcast their private input <span class="math inline">\(b_j\)</span>.</li>
@@ -227,13 +233,56 @@ Note that the <span class="math inline">\(t=f+1\)</span> round of checks is para
 </ol>
 <ul>
 <li>Validity: when all nodes have the same private input <span class="math inline">\(b\)</span>, their private inputs are consistently broadcasted to all other honest nodes <em>since <span class="math inline">\(\pi\)</span> is valid</em>. Since <span class="math inline">\(f&lt;n/2\)</span>, honest nodes have consistent output by majority vote.</li>
-<li>Consistency: all honest nodes have the same “perception” of other nodes, so majority votes are consistent.</li>
+<li>Agreement: all honest nodes have the same “perception” of other nodes, so majority votes are consistent.</li>
 </ul>
 <p>Given a BA protocol <span class="math inline">\(\pi\)</span>, construct a BB protocol as follows:</p>
 <ol style="list-style-type: decimal">
-<li><span class="math inline">\(T=0\)</span>: non-senders run BA with <span class="math inline">\(b_j=0\)</span>, sender runs with <span class="math inline">\(v^*\)</span>.</li>
-<li><span class="math inline">\(T=1\)</span>: non-senders run BA with <span class="math inline">\(b_j=1\)</span>, sender runs with <span class="math inline">\(v^*\)</span>.</li>
+<li><span class="math inline">\(T=0\)</span>: sender sends <span class="math inline">\(v^*\)</span> to all non-senders.</li>
+<li>Everyone runs <span class="math inline">\(\pi\)</span> on their received bits.</li>
 </ol>
+<ul>
+<li>Agreement follows from <span class="math inline">\(\pi\)</span> satisfying agreement.</li>
+<li>Validity: when sender is honest, all honest nodes receive <span class="math inline">\(v^*\)</span>. Validity follows from BA validity of <span class="math inline">\(\pi\)</span>.</li>
+</ul>
+</details>
+<details>
+<summary>
+Illustrative questions
+</summary>
+<p>Assume <span class="math inline">\(n\geq 3\)</span> and consider the following protocol:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(t=0\)</span>: sender sends private bit with signature to all other nodes. The sender terminates with its own private bit.</li>
+<li><span class="math inline">\(t=1\)</span>: every non-sender node <span class="math inline">\(j\)</span> echoes what it heard from the sender to all non-sender nodes.</li>
+<li><span class="math inline">\(t=2\)</span>: every non-sender node collects all the votes it has received and outputs majority vote.</li>
+</ol>
+<p>Several questions:</p>
+<ol style="list-style-type: decimal">
+<li>For <span class="math inline">\(f=1\)</span> does this protocol satisfy agreement?
+<ul>
+<li>Yes. Suppose sender Byzantine, the honest non-sender nodes will agree on their votes (i.e. what they heard from the sender). Suppose a non-sender Byzantine, they’re unable to overturn <span class="math inline">\(n-1&gt;1\)</span> consistent votes.</li>
+</ul></li>
+<li>For <span class="math inline">\(f=1\)</span>, does this protocol satisfy validity?
+<ul>
+<li>Yes. Honest sender broadcasts <span class="math inline">\(v^*\)</span> to <span class="math inline">\(n-2\)</span> other honest nodes, so there are <span class="math inline">\(n-1&gt;1\)</span> honest votes contributing to the correct value.</li>
+</ul></li>
+<li>For <span class="math inline">\(f=2\)</span>, does this protocol satisfy agreement?
+<ul>
+<li>No. Consider <span class="math inline">\(n=4\)</span> with 1 Byzantine sender and non-sender. Sender sends <span class="math inline">\(0, 1\)</span> to honest nodes <span class="math inline">\(a, b\)</span>, respectively, and Byzantine non-sender echoes message <span class="math inline">\(0, 1\)</span> to <span class="math inline">\(a, b\)</span> respectively. Then <span class="math inline">\(a, b\)</span> outputs <span class="math inline">\(0, 1\)</span>.</li>
+</ul></li>
+<li>For <span class="math inline">\(f=2\)</span>, does protocol satisfy validity?
+<ul>
+<li>Yes. Byzantine nodes cannot forge alternative vote.</li>
+</ul></li>
+<li>Recall Dolev-Strong protocol. Suppose we stop it one step earlier with nodes committing to output at time <span class="math inline">\(f\)</span> rather than <span class="math inline">\(f+1\)</span>. Does it continue to satisfy agreement?
+<ul>
+<li>No. Consider Byzantine sender with <span class="math inline">\(f-1\)</span> Byzantine non-senders. At time <span class="math inline">\(f\)</span>, they can collude to produce a convincing message to send to a select subset of honest non-senders, while appearing honest to everyone else.</li>
+</ul></li>
+<li>Does the protocol in (5) satisfy validity?
+<ul>
+<li>Yes. Non-senders cannot forge signatures.</li>
+</ul></li>
+</ol>
+</details>
 </div>
 <div id="smr" class="section level2 unnumbered hasAnchor">
 <h2>State-machine replication<a href="consensus.html#smr" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -260,6 +309,19 @@ BB (validity, agreement)<span class="math inline">\(\implies\)</span> SMR (livel
 </summary>
 <p>Liveliness: request submitted to <span class="math inline">\(j\)</span> will be included in the log of all honest nodes when it’s <span class="math inline">\(j\)</span>’s term to be the leader, by <span class="math inline">\(\pi\)</span>’s <em>validity</em> property.</p>
 <p>Consistency: <span class="math inline">\(\pi\)</span>’s consistency implies that nodes execute the appending operation consistently.</p>
+</div>
+<div id="flmImpossible" class="section level2 unnumbered hasAnchor">
+<h2>FLM impossibility result<a href="consensus.html#flmImpossible" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The pivotal theorem below does not contradict Dolev-Strong <a href="consensus.html#thm:dolevStrongResult">1.1</a>.</p>
+<div class="theorem">
+<p><span id="thm:flm" class="theorem"><strong>Theorem 1.4  (FLM impossibility result) </strong></span>In a synchronous model with <span class="math inline">\(f\geq n/3\)</span>, there is no Byzantine broadcast protocol satisfying termination, agreement, and validity.</p>
+</div>
+<p>Proof: hexagon argument for <span class="math inline">\(n=3, f=1\)</span> plus reduction</p>
+<p>For simplicity, consider <span class="math inline">\(n=3\)</span> with nodes <span class="math inline">\(a, b, c\)</span>. Consider the hexagon connection below with <span class="math inline">\(\pi\)</span> running on each node; note that the hexagon type-checks since each triple of contiguous nodes only involve one sender and two non-senders:</p>
+<p><img src="images/hexagonFLM.jpg" width="100%" /></p>
+<p>Crucially, the hexagon setup with 6 honest nodes is equivalent to three Byzantine setups, with the Byzantine node simulating the encircled honest nodes. Scenario <span class="math inline">\(1\)</span> forces <span class="math inline">\(a=b=0\)</span>, scenario <span class="math inline">\(2\)</span> <span class="math inline">\(b=c=0\)</span>, and scenario <span class="math inline">\(c\)</span> <span class="math inline">\(c=a&#39;=0\)</span> but <span class="math inline">\(a&#39;=-1\)</span>, so either agreement or validity has to be violated.</p>
+<p>Proceeding to the general case, we provide a reduction that BB protocol for <span class="math inline">\((n&#39;=3k, f&#39;=k)\)</span> provides a BB protocol for <span class="math inline">\((3, 1)\)</span>: given a <span class="math inline">\((3k, k)\)</span> BB protocol, let node <span class="math inline">\(j\in [3]\)</span> simulate nodes <span class="math inline">\([(j-1)k, jk]\)</span> in <span class="math inline">\(\pi\)</span>. Since each node simulates <span class="math inline">\(k\)</span> nodes, there are at most <span class="math inline">\(k\)</span> Byzantine nodes in the simulated protocol, so validity and consistency follows.</p>
+<p>A <span class="math inline">\((3k+1, k+1)\)</span> protocol provides similar reduction: even if single node simulating <span class="math inline">\(k+1\)</span> nodes is Byzantine, there are at most <span class="math inline">\(kf+1\)</span> Byzantine nodes in the simulated protocol. Finally, a <span class="math inline">\((3k+2, k+1)\)</span> protocol reduces for each of the physical three nodes simulating <span class="math inline">\((k, k+1, k+1)\)</span> virtual nodes. Even if the only physical Byzantine node simulates <span class="math inline">\(k+1\)</span> virtual nodes, there’re only <span class="math inline">\(k+1\)</span> Byzantine nodes in the extended setup.</p>
 
 </div>
 </div>
