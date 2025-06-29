@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Gradient Methods | CS 184, Summer 2025</title>
-  <meta name="description" content="3 Gradient Methods | CS 184, Summer 2025" />
+  <title>2 Non-synchronous models | Blockchain</title>
+  <meta name="description" content="2 Non-synchronous models | Blockchain" />
   <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Gradient Methods | CS 184, Summer 2025" />
+  <meta property="og:title" content="2 Non-synchronous models | Blockchain" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Gradient Methods | CS 184, Summer 2025" />
+  <meta name="twitter:title" content="2 Non-synchronous models | Blockchain" />
   
   
   
@@ -23,14 +23,14 @@
 <meta name="author" content="Nicholas Lyu" />
 
 
-<meta name="date" content="2025-06-26" />
+<meta name="date" content="2025-06-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="sampling-value-based-methods.html"/>
+<link rel="prev" href="synchronous-consensus.html"/>
 <link rel="next" href="bibliography.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -73,22 +73,17 @@
 
 <ul class="summary">
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="mdp.html"><a href="mdp.html"><i class="fa fa-check"></i><b>1</b> Markov Decision Processes</a>
+<li class="chapter" data-level="1" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html"><i class="fa fa-check"></i><b>1</b> Synchronous Consensus</a>
 <ul>
-<li class="chapter" data-level="" data-path="mdp.html"><a href="mdp.html#MDP"><i class="fa fa-check"></i>Preliminaries</a></li>
-<li class="chapter" data-level="" data-path="mdp.html"><a href="mdp.html#vFunctions"><i class="fa fa-check"></i>Value functions</a></li>
-<li class="chapter" data-level="" data-path="mdp.html"><a href="mdp.html#optimalityMDP"><i class="fa fa-check"></i>Optimality</a></li>
-<li class="chapter" data-level="" data-path="mdp.html"><a href="mdp.html#policyEval"><i class="fa fa-check"></i>Policy evaluation</a></li>
-<li class="chapter" data-level="" data-path="mdp.html"><a href="mdp.html#optimalSolutions"><i class="fa fa-check"></i>Optimal solutions</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#fundAssump"><i class="fa fa-check"></i>Fundamental assumptions</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#singleShot"><i class="fa fa-check"></i>Single-shot consensus</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#smr"><i class="fa fa-check"></i>State-machine replication</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#flmImpossible"><i class="fa fa-check"></i>FLM impossibility result</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sampling-value-based-methods.html"><a href="sampling-value-based-methods.html"><i class="fa fa-check"></i><b>2</b> Sampling Value-based Methods</a>
+<li class="chapter" data-level="2" data-path="nSync.html"><a href="nSync.html"><i class="fa fa-check"></i><b>2</b> Non-synchronous models</a>
 <ul>
-<li class="chapter" data-level="" data-path="sampling-value-based-methods.html"><a href="sampling-value-based-methods.html#polEval"><i class="fa fa-check"></i>Model-free policy evaluation</a></li>
-<li class="chapter" data-level="" data-path="sampling-value-based-methods.html"><a href="sampling-value-based-methods.html#modelFreeControl"><i class="fa fa-check"></i>Model free control</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="gradient-methods.html"><a href="gradient-methods.html"><i class="fa fa-check"></i><b>3</b> Gradient Methods</a>
-<ul>
-<li class="chapter" data-level="" data-path="gradient-methods.html"><a href="gradient-methods.html#pg"><i class="fa fa-check"></i>Policy gradient</a></li>
+<li class="chapter" data-level="" data-path="nSync.html"><a href="nSync.html#aSync"><i class="fa fa-check"></i>Asynchronous model</a></li>
+<li class="chapter" data-level="" data-path="nSync.html"><a href="nSync.html#pSync"><i class="fa fa-check"></i>Partially synchronous model</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i>Bibliography</a></li>
 </ul>
@@ -100,7 +95,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CS 184, Summer 2025</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Blockchain</a>
           </h1>
         </div>
 
@@ -108,23 +103,13 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="gradient-methods" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">3</span> Gradient Methods<a href="gradient-methods.html#gradient-methods" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>In this section, we differentiably parameterize the policy; it turns out that the temporal structure of RL allows for gradient estimation.</p>
-<div id="pg" class="section level2 unnumbered hasAnchor">
-<h2>Policy gradient<a href="gradient-methods.html#pg" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>Policy-based RL has better convergence properties, learns stochastic policies, and are often effective in high-dimensional or continuous spaces.</li>
-<li>On the other hand, convergence is local and evaluating a policy is often <strong>high-variance</strong>.</li>
-</ol>
-<div class="definition">
-<p><span id="def:unlabeled-div-11" class="definition"><strong>Definition 3.1  (policy value) </strong></span>Fixing a MDP and parameterization <span class="math inline">\(\pi_\theta\)</span>, the policy value is writteh
-<span class="math display">\[
-    J_\theta = V^{\pi_\theta}(s_0) = \mathop{\mathbb{E}}\limits_{\pi_\theta} \left[
-        G_0
-    \right] = \sum_a \pi_\theta(a\mid s_0) Q(s_0, a)
-\]</span></p>
+<div id="nSync" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Non-synchronous models<a href="nSync.html#nSync" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="aSync" class="section level2 unnumbered hasAnchor">
+<h2>Asynchronous model<a href="nSync.html#aSync" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
+<div id="pSync" class="section level2 unnumbered hasAnchor">
+<h2>Partially synchronous model<a href="nSync.html#pSync" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>
@@ -133,7 +118,7 @@
           </div>
         </div>
       </div>
-<a href="sampling-value-based-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="synchronous-consensus.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="bibliography.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

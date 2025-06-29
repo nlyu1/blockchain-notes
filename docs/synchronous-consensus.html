@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>1 Consensus | Blockchain</title>
-  <meta name="description" content="1 Consensus | Blockchain" />
+  <title>1 Synchronous Consensus | Blockchain</title>
+  <meta name="description" content="1 Synchronous Consensus | Blockchain" />
   <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="1 Consensus | Blockchain" />
+  <meta property="og:title" content="1 Synchronous Consensus | Blockchain" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="1 Consensus | Blockchain" />
+  <meta name="twitter:title" content="1 Synchronous Consensus | Blockchain" />
   
   
   
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="bibliography.html"/>
+<link rel="next" href="nSync.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -73,12 +73,17 @@
 
 <ul class="summary">
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="consensus.html"><a href="consensus.html"><i class="fa fa-check"></i><b>1</b> Consensus</a>
+<li class="chapter" data-level="1" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html"><i class="fa fa-check"></i><b>1</b> Synchronous Consensus</a>
 <ul>
-<li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#fundAssump"><i class="fa fa-check"></i>Fundamental assumptions</a></li>
-<li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#singleShot"><i class="fa fa-check"></i>Single-shot consensus</a></li>
-<li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#smr"><i class="fa fa-check"></i>State-machine replication</a></li>
-<li class="chapter" data-level="" data-path="consensus.html"><a href="consensus.html#flmImpossible"><i class="fa fa-check"></i>FLM impossibility result</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#fundAssump"><i class="fa fa-check"></i>Fundamental assumptions</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#singleShot"><i class="fa fa-check"></i>Single-shot consensus</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#smr"><i class="fa fa-check"></i>State-machine replication</a></li>
+<li class="chapter" data-level="" data-path="synchronous-consensus.html"><a href="synchronous-consensus.html#flmImpossible"><i class="fa fa-check"></i>FLM impossibility result</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="nSync.html"><a href="nSync.html"><i class="fa fa-check"></i><b>2</b> Non-synchronous models</a>
+<ul>
+<li class="chapter" data-level="" data-path="nSync.html"><a href="nSync.html#aSync"><i class="fa fa-check"></i>Asynchronous model</a></li>
+<li class="chapter" data-level="" data-path="nSync.html"><a href="nSync.html#pSync"><i class="fa fa-check"></i>Partially synchronous model</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i>Bibliography</a></li>
 </ul>
@@ -98,25 +103,25 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="consensus" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> Consensus<a href="consensus.html#consensus" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="synchronous-consensus" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Synchronous Consensus<a href="synchronous-consensus.html#synchronous-consensus" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <ol style="list-style-type: decimal">
-<li>Fundamental assumptions: digital signature and point-to-point communication <a href="consensus.html#def:fundAssumptions">1.1</a>.</li>
-<li>Other assumptions: permissioned setting <a href="consensus.html#def:permissionSetting">1.3</a>, public-key infrastructure <a href="consensus.html#def:pki">1.4</a>, and synchronous model <a href="consensus.html#def:syncModel">1.5</a>.</li>
-<li>Single-shot concensus: <strong>Byzantine Broadcast</strong> <a href="consensus.html#def:bbSetup">1.6</a> and <strong>Byzantine Agreement</strong> <a href="consensus.html#def:baSetup">1.9</a>.
+<li>Fundamental assumptions: digital signature and point-to-point communication <a href="synchronous-consensus.html#def:fundAssumptions">1.1</a>.</li>
+<li>Other assumptions: permissioned setting <a href="synchronous-consensus.html#def:permissionSetting">1.3</a>, public-key infrastructure <a href="synchronous-consensus.html#def:pki">1.4</a>, and synchronous model <a href="synchronous-consensus.html#def:syncModel">1.5</a>.</li>
+<li>Single-shot concensus: <strong>Byzantine Broadcast</strong> <a href="synchronous-consensus.html#def:bbSetup">1.6</a> and <strong>Byzantine Agreement</strong> <a href="synchronous-consensus.html#def:baSetup">1.9</a>.
 <ul>
-<li><strong>Dolev-Strong</strong> (theorem <a href="consensus.html#thm:dolevStrongResult">1.1</a>): BB is solvable under permissioned setting, synchronous model, and PKI assumptions regardless of Byzantine portion.</li>
-<li>Equivalence of BA and BB when <span class="math inline">\(f&lt;n/2\)</span>: theorem <a href="consensus.html#thm:singleShotReduction">1.2</a>.</li>
-<li><strong>FLM Impossibility Result</strong> (theorem <a href="consensus.html#thm:flm">1.4</a>): synchronous BB is not solvable for <span class="math inline">\(f\geq n/3\)</span> <u>in the absence of PKI</u>.</li>
+<li><strong>Dolev-Strong</strong> (theorem <a href="synchronous-consensus.html#thm:dolevStrongResult">1.1</a>): BB is solvable under permissioned setting, synchronous model, and PKI assumptions regardless of Byzantine portion.</li>
+<li>Equivalence of BA and BB when <span class="math inline">\(f&lt;n/2\)</span>: theorem <a href="synchronous-consensus.html#thm:singleShotReduction">1.2</a>.</li>
+<li><strong>FLM Impossibility Result</strong> (theorem <a href="synchronous-consensus.html#thm:flm">1.4</a>): synchronous BB is not solvable for <span class="math inline">\(f\geq n/3\)</span> <u>in the absence of PKI</u>.</li>
 </ul></li>
-<li>Multi-shot concensus: <strong>State-Machine Replication</strong> <a href="consensus.html#def:smrSetup">1.10</a>. Reduction to BB under permissioned setting and synchronous model (theorem <a href="consensus.html#thm:smrBBReduction">1.3</a>).</li>
+<li>Multi-shot concensus: <strong>State-Machine Replication</strong> <a href="synchronous-consensus.html#def:smrSetup">1.10</a>. Reduction to BB under permissioned setting and synchronous model (theorem <a href="synchronous-consensus.html#thm:smrBBReduction">1.3</a>).</li>
 </ol>
 <div id="fundAssump" class="section level2 unnumbered hasAnchor">
-<h2>Fundamental assumptions<a href="consensus.html#fundAssump" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2>Fundamental assumptions<a href="synchronous-consensus.html#fundAssump" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="definition">
 <p><span id="def:fundAssumptions" class="definition"><strong>Definition 1.1  (fundamental assumptions of blockchains) </strong></span>Throughout these notes, we assume the existence of:</p>
 <ol style="list-style-type: decimal">
-<li>A correct, secure digital signature scheme (definition <a href="consensus.html#def:digSig">1.2</a> below).
+<li>A correct, secure digital signature scheme (definition <a href="synchronous-consensus.html#def:digSig">1.2</a> below).
 <ul>
 <li>Allows node <span class="math inline">\(A\)</span> to verify <span class="math inline">\(B\)</span>’s claim that “node <span class="math inline">\(C\)</span> said …”.</li>
 </ul></li>
@@ -157,7 +162,7 @@
 </div>
 </div>
 <div id="singleShot" class="section level2 unnumbered hasAnchor">
-<h2>Single-shot consensus<a href="consensus.html#singleShot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2>Single-shot consensus<a href="synchronous-consensus.html#singleShot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Consider a sequence of <span class="math inline">\([n]=\{1, 2, \dots, n\}\)</span> nodes. Given a protocol, nodes are of the following types; we may know a bound on the number of nodes in each type, but we do not know the nodes’ identity:</p>
 <ul>
 <li><strong>Honest</strong>: executes the prescribed protocol. This includes both the <em>validity</em> and <em>timeliness</em> of messages.</li>
@@ -193,10 +198,10 @@
 <p>For each nonsender, if outputs <span class="math inline">\(v\)</span> it’s convinced by exactly one <span class="math inline">\(v\)</span>, else outputs <span class="math inline">\(\perp\)</span>.</p>
 </div>
 <div class="theorem">
-<p><span id="thm:dolevStrongResult" class="theorem"><strong>Theorem 1.1  (Dolev-Strong) </strong></span>Byzantine Broadcast <a href="consensus.html#def:bbSetup">1.6</a> is solvable under:</p>
+<p><span id="thm:dolevStrongResult" class="theorem"><strong>Theorem 1.1  (Dolev-Strong) </strong></span>Byzantine Broadcast <a href="synchronous-consensus.html#def:bbSetup">1.6</a> is solvable under:</p>
 <ul>
-<li>Permissioned setting with <span class="math inline">\(n\)</span> nodes <a href="consensus.html#def:permissionSetting">1.3</a> under PKI assumptions <a href="consensus.html#def:pki">1.4</a>.</li>
-<li>Synchronous communication <a href="consensus.html#def:syncModel">1.5</a>.</li>
+<li>Permissioned setting with <span class="math inline">\(n\)</span> nodes <a href="synchronous-consensus.html#def:permissionSetting">1.3</a> under PKI assumptions <a href="synchronous-consensus.html#def:pki">1.4</a>.</li>
+<li>Synchronous communication <a href="synchronous-consensus.html#def:syncModel">1.5</a>.</li>
 <li>Arbitrary bound on Byzantine nodes. Note that the <span class="math inline">\(f=n, n-1\)</span> case satisfies validity and agreement trivially.</li>
 </ul>
 </div>
@@ -213,7 +218,7 @@ Proof idea: honest nodes broadcast what they’re convinced by, and protocol run
 Note that the <span class="math inline">\(t=f+1\)</span> round of checks is paramount; suppose we terminate at time <span class="math inline">\(t\)</span>, then the Byzantine nodes can collude to produce a convincing message to one of the honest nodes, which does not have time to broadcast this to other honest nodes.
 </details>
 <div class="definition">
-<p><span id="def:baSetup" class="definition"><strong>Definition 1.9  (Byzantine Agreement) </strong></span>Similar to Byzantine broadcast <a href="consensus.html#def:bbSetup">1.6</a>, but each node has private bit <span class="math inline">\(b_j\in \{0, 1\}\)</span> with at most <span class="math inline">\(f\)</span> Byzantine nodes. Solution must satisfy termination and:</p>
+<p><span id="def:baSetup" class="definition"><strong>Definition 1.9  (Byzantine Agreement) </strong></span>Similar to Byzantine broadcast <a href="synchronous-consensus.html#def:bbSetup">1.6</a>, but each node has private bit <span class="math inline">\(b_j\in \{0, 1\}\)</span> with at most <span class="math inline">\(f\)</span> Byzantine nodes. Solution must satisfy termination and:</p>
 <ol style="list-style-type: decimal">
 <li>Agreement: all honest nodes output the same bit.</li>
 <li>Validity: when all honest nodes have the same private input, they all terminate with <span class="math inline">\(b\)</span>.</li>
@@ -285,7 +290,7 @@ Illustrative questions
 </details>
 </div>
 <div id="smr" class="section level2 unnumbered hasAnchor">
-<h2>State-machine replication<a href="consensus.html#smr" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2>State-machine replication<a href="synchronous-consensus.html#smr" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Byzantine broadcast is also known as a <strong>one-shot consensus</strong> problem. We proceed to <strong>multi-shot consensus</strong> and demonstrate reduction to Byzantine Broadcast.</p>
 <div class="definition">
 <p><span id="def:smrSetup" class="definition"><strong>Definition 1.10  (state-machine replication) </strong></span>We’re working in a permissioned setting. Each honest node receives an incoming stream of requests and attempts to make this common knowledge; it also maintains an <strong>append-only log</strong>. A solution should satisfy</p>
@@ -311,17 +316,30 @@ BB (validity, agreement)<span class="math inline">\(\implies\)</span> SMR (livel
 <p>Consistency: <span class="math inline">\(\pi\)</span>’s consistency implies that nodes execute the appending operation consistently.</p>
 </div>
 <div id="flmImpossible" class="section level2 unnumbered hasAnchor">
-<h2>FLM impossibility result<a href="consensus.html#flmImpossible" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The pivotal theorem below does not contradict Dolev-Strong <a href="consensus.html#thm:dolevStrongResult">1.1</a>.</p>
+<h2>FLM impossibility result<a href="synchronous-consensus.html#flmImpossible" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="theorem">
 <p><span id="thm:flm" class="theorem"><strong>Theorem 1.4  (FLM impossibility result) </strong></span>In a synchronous model with <span class="math inline">\(f\geq n/3\)</span>, there is no Byzantine broadcast protocol satisfying termination, agreement, and validity.</p>
 </div>
-<p>Proof: hexagon argument for <span class="math inline">\(n=3, f=1\)</span> plus reduction</p>
+<details>
+<summary>
+Proof: hexagon argument for <span class="math inline">\(n=3, f=1\)</span> plus reductions
+</summary>
 <p>For simplicity, consider <span class="math inline">\(n=3\)</span> with nodes <span class="math inline">\(a, b, c\)</span>. Consider the hexagon connection below with <span class="math inline">\(\pi\)</span> running on each node; note that the hexagon type-checks since each triple of contiguous nodes only involve one sender and two non-senders:</p>
-<p><img src="images/hexagonFLM.jpg" width="100%" /></p>
 <p>Crucially, the hexagon setup with 6 honest nodes is equivalent to three Byzantine setups, with the Byzantine node simulating the encircled honest nodes. Scenario <span class="math inline">\(1\)</span> forces <span class="math inline">\(a=b=0\)</span>, scenario <span class="math inline">\(2\)</span> <span class="math inline">\(b=c=0\)</span>, and scenario <span class="math inline">\(c\)</span> <span class="math inline">\(c=a&#39;=0\)</span> but <span class="math inline">\(a&#39;=-1\)</span>, so either agreement or validity has to be violated.</p>
 <p>Proceeding to the general case, we provide a reduction that BB protocol for <span class="math inline">\((n&#39;=3k, f&#39;=k)\)</span> provides a BB protocol for <span class="math inline">\((3, 1)\)</span>: given a <span class="math inline">\((3k, k)\)</span> BB protocol, let node <span class="math inline">\(j\in [3]\)</span> simulate nodes <span class="math inline">\([(j-1)k, jk]\)</span> in <span class="math inline">\(\pi\)</span>. Since each node simulates <span class="math inline">\(k\)</span> nodes, there are at most <span class="math inline">\(k\)</span> Byzantine nodes in the simulated protocol, so validity and consistency follows.</p>
-<p>A <span class="math inline">\((3k+1, k+1)\)</span> protocol provides similar reduction: even if single node simulating <span class="math inline">\(k+1\)</span> nodes is Byzantine, there are at most <span class="math inline">\(kf+1\)</span> Byzantine nodes in the simulated protocol. Finally, a <span class="math inline">\((3k+2, k+1)\)</span> protocol reduces for each of the physical three nodes simulating <span class="math inline">\((k, k+1, k+1)\)</span> virtual nodes. Even if the only physical Byzantine node simulates <span class="math inline">\(k+1\)</span> virtual nodes, there’re only <span class="math inline">\(k+1\)</span> Byzantine nodes in the extended setup.</p>
+A <span class="math inline">\((3k+1, k+1)\)</span> protocol provides similar reduction: even if single node simulating <span class="math inline">\(k+1\)</span> nodes is Byzantine, there are at most <span class="math inline">\(k+1\)</span> Byzantine nodes in the simulated protocol. Finally, a <span class="math inline">\((3k+2, k+1)\)</span> protocol reduces for each of the physical three nodes simulating <span class="math inline">\((k, k+1, k+1)\)</span> virtual nodes. Even if the only physical Byzantine node simulates <span class="math inline">\(k+1\)</span> virtual nodes, there’re only <span class="math inline">\(k+1\)</span> Byzantine nodes in the extended setup.
+</details>
+<p><img src="images/hexagonFLM.jpg" width="100%" /></p>
+<p>Remarks are in order:</p>
+<ol style="list-style-type: decimal">
+<li>The pivotal theorem below does not contradict Dolev-Strong <a href="synchronous-consensus.html#thm:dolevStrongResult">1.1</a>.</li>
+<li>The hexagon simulation relies on lack of PKI. The crux of the proof is that:
+<ol style="list-style-type: lower-alpha">
+<li>Byzantine node can perfectly simulate hexagon cuts.</li>
+<li>Since honest nodes cannot distinguish between all-honest hexagon and Byzantine-cut scenarios, it must make the same decision in both runs.</li>
+</ol></li>
+<li>In the presence of PKI, starting with scenario (1), the Byzantine non-sender instantiates honest nodes <span class="math inline">\(c, c&#39;, a&#39;, b\)</span> and knows their secret keys; this makes <span class="math inline">\(a, b\)</span> unable to tell the hexagon apart from scenario (1). However, we cannot force <span class="math inline">\(b=c\)</span> by scenario <span class="math inline">\(2\)</span> since the Byzantine simulator cannot forget the honest <span class="math inline">\(a\)</span>’s signature.</li>
+</ol>
 
 </div>
 </div>
@@ -331,7 +349,7 @@ BB (validity, agreement)<span class="math inline">\(\implies\)</span> SMR (livel
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="bibliography.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="nSync.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -1,4 +1,4 @@
-# Consensus 
+# Synchronous Consensus 
 
 1. Fundamental assumptions: digital signature and point-to-point communication \@ref(def:fundAssumptions). 
 2. Other assumptions: permissioned setting \@ref(def:permissionSetting), public-key infrastructure \@ref(def:pki), and synchronous model \@ref(def:syncModel). 
@@ -193,22 +193,29 @@ Consistency: $\pi$'s consistency implies that nodes execute the appending operat
 
 ## FLM impossibility result {#flmImpossible -}
 
-The pivotal theorem below does not contradict Dolev-Strong \@ref(thm:dolevStrongResult). 
-
 :::{.theorem #flm name="FLM impossibility result"}
 In a synchronous model with $f\geq n/3$, there is no Byzantine broadcast protocol satisfying termination, agreement, and validity. 
 :::
 
-Proof: hexagon argument for $n=3, f=1$ plus reduction 
-
+<details>
+<summary>Proof: hexagon argument for $n=3, f=1$ plus reductions </summary>
 For simplicity, consider $n=3$ with nodes $a, b, c$. Consider the hexagon connection below with $\pi$ running on each node; note that the hexagon type-checks since each triple of contiguous nodes only involve one sender and two non-senders: 
-
-```{r fig:hexagonFLM, echo=FALSE, out.width="100%"}
-knitr::include_graphics("images/hexagonFLM.jpg")
-```
 
 Crucially, the hexagon setup with 6 honest nodes is equivalent to three Byzantine setups, with the Byzantine node simulating the encircled honest nodes. Scenario $1$ forces $a=b=0$, scenario $2$ $b=c=0$, and scenario $c$ $c=a'=0$ but $a'=-1$, so either agreement or validity has to be violated. 
 
 Proceeding to the general case, we provide a reduction that BB protocol for $(n'=3k, f'=k)$ provides a BB protocol for $(3, 1)$: given a $(3k, k)$ BB protocol, let node $j\in [3]$ simulate nodes $[(j-1)k, jk]$ in $\pi$. Since each node simulates $k$ nodes, there are at most $k$ Byzantine nodes in the simulated protocol, so validity and consistency follows. 
 
-A $(3k+1, k+1)$ protocol provides similar reduction: even if single node simulating $k+1$ nodes is Byzantine, there are at most $kf+1$ Byzantine nodes in the simulated protocol. Finally, a $(3k+2, k+1)$ protocol reduces for each of the physical three nodes simulating $(k, k+1, k+1)$ virtual nodes. Even if the only physical Byzantine node simulates $k+1$ virtual nodes, there're only $k+1$ Byzantine nodes in the extended setup. 
+A $(3k+1, k+1)$ protocol provides similar reduction: even if single node simulating $k+1$ nodes is Byzantine, there are at most $k+1$ Byzantine nodes in the simulated protocol. Finally, a $(3k+2, k+1)$ protocol reduces for each of the physical three nodes simulating $(k, k+1, k+1)$ virtual nodes. Even if the only physical Byzantine node simulates $k+1$ virtual nodes, there're only $k+1$ Byzantine nodes in the extended setup. 
+</details>
+
+```{r fig:hexagonFLM, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/hexagonFLM.jpg")
+```
+
+Remarks are in order: 
+
+1. The pivotal theorem below does not contradict Dolev-Strong \@ref(thm:dolevStrongResult). 
+2. The hexagon simulation relies on lack of PKI. The crux of the proof is that: 
+    a. Byzantine node can perfectly simulate hexagon cuts. 
+    b. Since honest nodes cannot distinguish between all-honest hexagon and Byzantine-cut scenarios, it must make the same decision in both runs. 
+3. In the presence of PKI, starting with scenario (1), the Byzantine non-sender instantiates honest nodes $c, c', a', b$ and knows their secret keys; this makes $a, b$ unable to tell the hexagon apart from scenario (1). However, we cannot force $b=c$ by scenario $2$ since the Byzantine simulator cannot forget the honest $a$'s signature. 

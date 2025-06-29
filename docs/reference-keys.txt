@@ -12,4 +12,5 @@ thm:singleShotReduction
 def:smrSetup
 thm:smrBBReduction
 thm:flm
-consensus
+synchronous-consensus
+nSync
